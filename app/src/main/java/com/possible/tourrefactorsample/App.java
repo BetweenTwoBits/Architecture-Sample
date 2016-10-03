@@ -16,7 +16,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "tour-db");
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "tour.db");
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
     }
