@@ -6,7 +6,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.possible.tourrefactorsample.App;
 import com.possible.tourrefactorsample.R;
+import com.possible.tourrefactorsample.data.models.Book;
+import com.possible.tourrefactorsample.data.models.BookDao;
+import com.possible.tourrefactorsample.data.models.DaoSession;
 import com.possible.tourrefactorsample.data.network.responses.BookResponse;
 import com.possible.tourrefactorsample.data.services.TourService;
 
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private Subscriber<List<BookResponse>> bookSubscriber;
+    private BookDao bookDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        DaoSession session = ((App) getApplication()).getDaoSession();
+        bookDao = session.getBookDao();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://fakeurl.com")
@@ -59,6 +67,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNext(List<BookResponse> books) {
+                for (BookResponse bookResponse : books) {
+                    Book book = new Book();
+                    book.setTitle(bookResponse.title);
+                    book.setImageUrl(bookResponse.imageUrl);
+                    book.setAuthor(bookResponse.author);
+                    bookDao.insert(book);
+                }
+
                 adapter.setBookList(books);
             }
         };
