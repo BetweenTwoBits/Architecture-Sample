@@ -20,7 +20,7 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String BASE_URL = "http://de-coding-test.s3.amazonaws.com/";
+    private static final String BASE_URL = "http://de-coding-test.s3.amazonaws.com/books.json";
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private Subscriber<List<BookModel>> bookSubscriber;
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl("https://fakeurl.com")
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        tourService.getBooks()
+        tourService.getBooks(BASE_URL)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(bookSubscriber);
