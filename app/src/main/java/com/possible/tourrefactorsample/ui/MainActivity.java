@@ -1,4 +1,4 @@
-package com.possible.tourrefactorsample;
+package com.possible.tourrefactorsample.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,8 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.possible.tourrefactorsample.data.model.BookModel;
-import com.possible.tourrefactorsample.data.TourService;
+import com.possible.tourrefactorsample.R;
+import com.possible.tourrefactorsample.data.models.BookModel;
+import com.possible.tourrefactorsample.data.services.TourService;
 
 import java.util.List;
 

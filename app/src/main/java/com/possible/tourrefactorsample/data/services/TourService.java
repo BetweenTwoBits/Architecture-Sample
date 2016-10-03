@@ -1,6 +1,6 @@
-package com.possible.tourrefactorsample.data;
+package com.possible.tourrefactorsample.data.services;
 
-import com.possible.tourrefactorsample.data.model.BookModel;
+import com.possible.tourrefactorsample.data.models.BookModel;
 
 import java.util.List;
 

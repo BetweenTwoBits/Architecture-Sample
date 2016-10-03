@@ -1,4 +1,4 @@
-package com.possible.tourrefactorsample;
+package com.possible.tourrefactorsample.ui;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.possible.tourrefactorsample.data.model.BookModel;
+import com.possible.tourrefactorsample.R;
+import com.possible.tourrefactorsample.data.models.BookModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
