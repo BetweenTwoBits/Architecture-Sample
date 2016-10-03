@@ -10,14 +10,14 @@ public class Book {
     private Long id;
 
     private String title;
-    private String imageURLs;
+    private String imageUrl;
     private String author;
 
-    @Generated(hash = 1505671809)
-    public Book(Long id, String title, String imageURLs, String author) {
+    @Generated(hash = 931745658)
+    public Book(Long id, String title, String imageUrl, String author) {
         this.id = id;
         this.title = title;
-        this.imageURLs = imageURLs;
+        this.imageUrl = imageUrl;
         this.author = author;
     }
 
@@ -41,12 +41,12 @@ public class Book {
         this.title = title;
     }
 
-    public String getImageURLs() {
-        return this.imageURLs;
+    public String getImageUrl() {
+        return this.imageUrl;
     }
 
-    public void setImageURLs(String imageURLs) {
-        this.imageURLs = imageURLs;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getAuthor() {
