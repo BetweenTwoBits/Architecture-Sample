@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String BASE_URL = "http://www.pgatour.com/data/de/v2/[season_year]/[tour_id]/schedule.json";
+    private static final String BASE_URL = "http://de-coding-test.s3.amazonaws.com/";
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override

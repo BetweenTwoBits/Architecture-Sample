@@ -8,35 +8,4 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="ScheduleText">
-        <item name="android:textStyle">normal</item>
-    </style>
-
-    <style name="ScheduleText.Small">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/gray</item>
-    </style>
-
-    <style name="ScheduleText.Small.Blue">
-        <item name="android:textColor">@color/blue</item>
-    </style>
-
-    <style name="ScheduleText.Small.BlueGray">
-        <item name="android:textColor">@color/blue_gray</item>
-    </style>
-
-    <style name="ScheduleText.Normal">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@android:color/black</item>
-    </style>
-
-    <style name="ScheduleText.Normal.Gray">
-        <item name="android:textColor">@color/gray</item>
-    </style>
-
-    <style name="ScheduleText.Large">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@android:color/black</item>
-    </style>
-
 </resources>
