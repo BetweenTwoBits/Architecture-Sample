@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.possible.tourrefactorsample.R;
-import com.possible.tourrefactorsample.data.models.BookModel;
+import com.possible.tourrefactorsample.data.network.responses.BookResponse;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -17,14 +17,14 @@ import java.util.List;
 
 public class TourAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<BookModel> bookData = new ArrayList<>();
+    private final List<BookResponse> bookData = new ArrayList<>();
     private Context context;
 
     public TourAdapter(Context context) {
         this.context = context;
     }
 
-    public void setBookList(List<BookModel> bookData) {
+    public void setBookList(List<BookResponse> bookData) {
         this.bookData.clear();
         this.bookData.addAll(bookData);
         notifyDataSetChanged();
@@ -39,7 +39,7 @@ public class TourAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         TourViewHolder tourViewHolder = (TourViewHolder) holder;
-        BookModel book = bookData.get(position);
+        BookResponse book = bookData.get(position);
 
         if (book != null) {
             tourViewHolder.bindBook(book);
@@ -64,8 +64,8 @@ public class TourAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             bookAuthorView = (TextView) itemView.findViewById(R.id.book_author);
         }
 
-        public void bindBook(BookModel book) {
-            String bookUrl = book.imageURL;
+        public void bindBook(BookResponse book) {
+            String bookUrl = book.imageUrl;
             String bookTitle = book.title;
             String bookAuthor = book.author;
 

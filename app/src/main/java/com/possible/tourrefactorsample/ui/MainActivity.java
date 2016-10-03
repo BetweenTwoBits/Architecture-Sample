@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.possible.tourrefactorsample.R;
-import com.possible.tourrefactorsample.data.models.BookModel;
+import com.possible.tourrefactorsample.data.network.responses.BookResponse;
 import com.possible.tourrefactorsample.data.services.TourService;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String BASE_URL = "http://de-coding-test.s3.amazonaws.com/books.json";
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private Subscriber<List<BookModel>> bookSubscriber;
+    private Subscriber<List<BookResponse>> bookSubscriber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         TourService tourService = retrofit.create(TourService.class);
 
-        bookSubscriber = new Subscriber<List<BookModel>>() {
+        bookSubscriber = new Subscriber<List<BookResponse>>() {
             @Override
             public void onCompleted() {
                 Log.d(TAG, "onComplete called");
@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNext(List<BookModel> bookModels) {
-                adapter.setBookList(bookModels);
+            public void onNext(List<BookResponse> books) {
+                adapter.setBookList(books);
             }
         };
 

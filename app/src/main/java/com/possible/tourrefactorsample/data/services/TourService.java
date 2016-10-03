@@ -1,6 +1,6 @@
 package com.possible.tourrefactorsample.data.services;
 
-import com.possible.tourrefactorsample.data.models.BookModel;
+import com.possible.tourrefactorsample.data.network.responses.BookResponse;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ import rx.Observable;
 
 public interface TourService {
     @GET()
-    Observable<List<BookModel>> getBooks(@Url String url);
+    Observable<List<BookResponse>> getBooks(@Url String url);
 }
