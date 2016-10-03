@@ -1,4 +1,4 @@
-package com.possible.tourrefactorsample;
+package com.possible.tourrefactorsample.data.model;
 
 public class BookModel {
     public String title;

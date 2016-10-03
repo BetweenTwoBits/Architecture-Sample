@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.possible.tourrefactorsample.data.model.BookModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

@@ -6,6 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.possible.tourrefactorsample.data.model.BookModel;
+import com.possible.tourrefactorsample.data.TourService;
+
 import java.util.List;
 
 import retrofit2.Retrofit;
