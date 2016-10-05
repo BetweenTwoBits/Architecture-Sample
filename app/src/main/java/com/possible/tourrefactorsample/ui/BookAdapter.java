@@ -15,12 +15,12 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TourAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final List<BookResponse> bookData = new ArrayList<>();
     private Context context;
 
-    public TourAdapter(Context context) {
+    public BookAdapter(Context context) {
         this.context = context;
     }
 

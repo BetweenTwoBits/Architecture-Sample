@@ -16,7 +16,7 @@ import com.possible.tourrefactorsample.data.models.Book;
 import com.possible.tourrefactorsample.data.models.BookDao;
 import com.possible.tourrefactorsample.data.models.DaoSession;
 import com.possible.tourrefactorsample.data.network.responses.BookResponse;
-import com.possible.tourrefactorsample.data.services.TourService;
+import com.possible.tourrefactorsample.data.network.NetworkDataSource;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        final TourAdapter adapter = new TourAdapter(this);
+        final BookAdapter adapter = new BookAdapter(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        TourService tourService = retrofit.create(TourService.class);
+        NetworkDataSource networkDataSource = retrofit.create(NetworkDataSource.class);
 
         bookSubscriber = new Subscriber<List<BookResponse>>() {
             @Override
@@ -82,14 +82,14 @@ public class MainActivity extends AppCompatActivity {
                     book.setTitle(bookResponse.title);
                     book.setImageUrl(bookResponse.imageUrl);
                     book.setAuthor(bookResponse.author);
-                    bookDao.insert(book);
+                    bookDao.insertInTx(book);
                 }
 
                 adapter.setBookList(books);
             }
         };
 
-        tourService.getBooks(BASE_URL)
+        networkDataSource.getObservableBooks(BASE_URL)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(bookSubscriber);

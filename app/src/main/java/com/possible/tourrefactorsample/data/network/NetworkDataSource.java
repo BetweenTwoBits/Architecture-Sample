@@ -1,4 +1,4 @@
-package com.possible.tourrefactorsample.data.services;
+package com.possible.tourrefactorsample.data.network;
 
 import com.possible.tourrefactorsample.data.network.responses.BookResponse;
 
@@ -8,7 +8,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Url;
 import rx.Observable;
 
-public interface TourService {
+public interface NetworkDataSource {
     @GET()
-    Observable<List<BookResponse>> getBooks(@Url String url);
+    Observable<List<BookResponse>> getObservableBooks(@Url String url);
 }
