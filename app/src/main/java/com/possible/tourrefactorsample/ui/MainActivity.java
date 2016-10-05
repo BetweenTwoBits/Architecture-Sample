@@ -1,10 +1,14 @@
 package com.possible.tourrefactorsample.ui;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.possible.tourrefactorsample.App;
 import com.possible.tourrefactorsample.R;
@@ -14,6 +18,12 @@ import com.possible.tourrefactorsample.data.models.DaoSession;
 import com.possible.tourrefactorsample.data.network.responses.BookResponse;
 import com.possible.tourrefactorsample.data.services.TourService;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.List;
 
 import retrofit2.Retrofit;
@@ -90,6 +100,56 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         if (bookSubscriber != null) {
             bookSubscriber.unsubscribe();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        invalidateOptionsMenu();
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_database) {
+            copyDb();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void copyDb() {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+                String currentDBPath = "//data//com.possible.tourrefactorsample//databases//tour.db";
+                File currentDB = new File(data, currentDBPath);
+                File backupDB = new File(sd, "tour.db");
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(currentDB).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                    Toast.makeText(this, "DB Exported to " + backupDB.getAbsolutePath(), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "DB Not found", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Can't write to SD card", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (FileNotFoundException e) {
+            Toast.makeText(this, "FileNotFound: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            Toast.makeText(this, "IOException: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 }
