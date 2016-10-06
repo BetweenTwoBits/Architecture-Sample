@@ -18,12 +18,12 @@ import com.possible.tourrefactorsample.data.ControllerResult;
 import com.possible.tourrefactorsample.data.Subscriptor;
 import com.possible.tourrefactorsample.data.controllers.BaseController;
 import com.possible.tourrefactorsample.data.controllers.BookController;
-import com.possible.tourrefactorsample.data.database.BookDataSource;
 import com.possible.tourrefactorsample.data.models.Book;
-import com.possible.tourrefactorsample.data.models.DaoSession;
 import com.possible.tourrefactorsample.data.network.ControllerCallback;
-import com.possible.tourrefactorsample.data.network.NetworkDataSource;
 import com.possible.tourrefactorsample.data.network.requests.BookRequest;
+import com.possible.tourrefactorsample.di.ActivityComponent;
+import com.possible.tourrefactorsample.di.ActivityModule;
+import com.possible.tourrefactorsample.di.DaggerActivityComponent;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,26 +34,28 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity implements Subscriptor {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private List<BaseController> subscriptedControllers = new ArrayList<>();
-    private BookController bookController;
-    private BookAdapter adapter;
+    @Inject BookController bookController;
 
-    private boolean destroyedBySystem;
+    private ActivityComponent activityComponent;
+
+    private List<BaseController> subscriptedControllers = new ArrayList<>();
+    private BookAdapter adapter;
 
     private RecyclerView recyclerView;
     private TextView errorText;
     private ProgressBar progressBar;
 
+    private boolean destroyedBySystem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        injectDependencies();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -65,19 +67,6 @@ public class MainActivity extends AppCompatActivity implements Subscriptor {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
-        DaoSession session = ((App) getApplication()).getDaoSession();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://fakeurl.com")
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        NetworkDataSource networkDataSource = retrofit.create(NetworkDataSource.class);
-        BookDataSource bookDataSource = new BookDataSource(session);
-
-        bookController = new BookController(getApplication(), networkDataSource, bookDataSource);
 
         bookController.loadBooks(this, true, new BookRequest(), new ControllerCallback<ControllerResult<List<Book>>>() {
             @Override
@@ -155,6 +144,18 @@ public class MainActivity extends AppCompatActivity implements Subscriptor {
             errorText.setVisibility(View.GONE);
             adapter.setBookList(result);
         }
+    }
+
+    private void injectDependencies() {
+        activityComponent = DaggerActivityComponent.builder()
+                .applicationComponent(((App) getApplication()).getAppComponent())
+                .activityModule(new ActivityModule(this))
+                .build();
+        inject(activityComponent);
+    }
+
+    private void inject(ActivityComponent component) {
+        component.inject(this);
     }
 
     private void copyDb() {
