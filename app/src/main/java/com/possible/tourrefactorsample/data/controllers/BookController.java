@@ -56,7 +56,7 @@ public class BookController extends BaseController {
                 .onErrorResumeNext(new Func1<Throwable, Observable<? extends ControllerResult<List<Book>>>>() {
                     @Override
                     public Observable<? extends ControllerResult<List<Book>>> call(Throwable e) {
-                        return Observable.just(new ControllerResult<>(bookDataSource.getBooks()));
+                        return Observable.just(new ControllerResult<>(e, bookDataSource.getBooks()));
                     }
                 });
 
