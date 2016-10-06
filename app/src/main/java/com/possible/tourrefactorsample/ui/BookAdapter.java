@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.possible.tourrefactorsample.R;
-import com.possible.tourrefactorsample.data.network.responses.BookResponse;
+import com.possible.tourrefactorsample.data.models.Book;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -17,14 +17,14 @@ import java.util.List;
 
 public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<BookResponse> bookData = new ArrayList<>();
+    private final List<Book> bookData = new ArrayList<>();
     private Context context;
 
     public BookAdapter(Context context) {
         this.context = context;
     }
 
-    public void setBookList(List<BookResponse> bookData) {
+    public void setBookList(List<Book> bookData) {
         this.bookData.clear();
         this.bookData.addAll(bookData);
         notifyDataSetChanged();
@@ -39,7 +39,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         TourViewHolder tourViewHolder = (TourViewHolder) holder;
-        BookResponse book = bookData.get(position);
+        Book book = bookData.get(position);
 
         if (book != null) {
             tourViewHolder.bindBook(book);
@@ -64,10 +64,10 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             bookAuthorView = (TextView) itemView.findViewById(R.id.book_author);
         }
 
-        public void bindBook(BookResponse book) {
-            String bookUrl = book.imageUrl;
-            String bookTitle = book.title;
-            String bookAuthor = book.author;
+        public void bindBook(Book book) {
+            String bookUrl = book.getImageUrl();
+            String bookTitle = book.getTitle();
+            String bookAuthor = book.getAuthor();
 
             if (bookUrl != null) {
                 Picasso.with(itemView.getContext()).load(bookUrl).placeholder(R.mipmap.ic_launcher).into(bookImage);

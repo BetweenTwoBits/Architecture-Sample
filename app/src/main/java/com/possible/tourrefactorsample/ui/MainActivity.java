@@ -5,18 +5,22 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.possible.tourrefactorsample.App;
 import com.possible.tourrefactorsample.R;
+import com.possible.tourrefactorsample.data.ControllerResult;
+import com.possible.tourrefactorsample.data.Subscriptor;
+import com.possible.tourrefactorsample.data.controllers.BaseController;
+import com.possible.tourrefactorsample.data.controllers.BookController;
+import com.possible.tourrefactorsample.data.database.BookDataSource;
 import com.possible.tourrefactorsample.data.models.Book;
-import com.possible.tourrefactorsample.data.models.BookDao;
 import com.possible.tourrefactorsample.data.models.DaoSession;
-import com.possible.tourrefactorsample.data.network.responses.BookResponse;
+import com.possible.tourrefactorsample.data.network.ControllerCallback;
 import com.possible.tourrefactorsample.data.network.NetworkDataSource;
+import com.possible.tourrefactorsample.data.network.requests.BookRequest;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,22 +28,21 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Subscriptor {
 
-    private static final String BASE_URL = "http://de-coding-test.s3.amazonaws.com/books.json";
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private Subscriber<List<BookResponse>> bookSubscriber;
-    private BookDao bookDao;
+    private boolean destroyedBySystem;
+    private List<BaseController> subscriptedControllers = new ArrayList<>();
+    private BookController bookController;
+    private BookAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +51,12 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        final BookAdapter adapter = new BookAdapter(this);
+        adapter = new BookAdapter(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
         DaoSession session = ((App) getApplication()).getDaoSession();
-        bookDao = session.getBookDao();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://fakeurl.com")
@@ -63,43 +65,60 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         NetworkDataSource networkDataSource = retrofit.create(NetworkDataSource.class);
+        BookDataSource bookDataSource = new BookDataSource(session);
 
-        bookSubscriber = new Subscriber<List<BookResponse>>() {
+        bookController = new BookController(getApplication(), networkDataSource, bookDataSource);
+
+        bookController.loadBooks(this, true, new BookRequest(), new ControllerCallback<ControllerResult<List<Book>>>() {
             @Override
-            public void onCompleted() {
-                Log.d(TAG, "onComplete called");
+            public void onControllerNext(ControllerResult<List<Book>> result) {
+                onBooksReceived(result.getResult(), result.isNetworkError());
             }
+        });
+    }
 
-            @Override
-            public void onError(Throwable t) {
-                Log.e(TAG, "Error fetching file:", t);
-            }
-
-            @Override
-            public void onNext(List<BookResponse> books) {
-                for (BookResponse bookResponse : books) {
-                    Book book = new Book();
-                    book.setTitle(bookResponse.title);
-                    book.setImageUrl(bookResponse.imageUrl);
-                    book.setAuthor(bookResponse.author);
-                    bookDao.insertInTx(book);
-                }
-
-                adapter.setBookList(books);
-            }
-        };
-
-        networkDataSource.getObservableBooks(BASE_URL)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bookSubscriber);
+    @Override
+    public void onResume() {
+        super.onResume();
+        destroyedBySystem = false;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (bookSubscriber != null) {
-            bookSubscriber.unsubscribe();
+        unsubscribeAllControllers();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        destroyedBySystem = true;
+    }
+
+    @Override
+    public String getSubscriptorTag() {
+        return TAG;
+    }
+
+    private void unsubscribeAllControllers() {
+        String tag = getSubscriptorTag();
+        for (BaseController controller : subscriptedControllers) {
+            controller.unsubscribe(tag, !destroyedBySystem);
+        }
+    }
+
+    @Override
+    public void addSubscriptedController(BaseController controller) {
+        if (!subscriptedControllers.contains(controller)) {
+            subscriptedControllers.add(controller);
+        }
+    }
+
+    private void onBooksReceived(List<Book> result, boolean networkError) {
+        if (networkError) {
+            //TODO show error text
+        } else {
+            adapter.setBookList(result);
         }
     }
 
