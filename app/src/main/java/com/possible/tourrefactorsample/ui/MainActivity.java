@@ -7,6 +7,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.possible.tourrefactorsample.App;
@@ -39,17 +42,24 @@ public class MainActivity extends AppCompatActivity implements Subscriptor {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private boolean destroyedBySystem;
     private List<BaseController> subscriptedControllers = new ArrayList<>();
     private BookController bookController;
     private BookAdapter adapter;
+
+    private boolean destroyedBySystem;
+
+    private RecyclerView recyclerView;
+    private TextView errorText;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        errorText = (TextView) findViewById(R.id.error_text);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         adapter = new BookAdapter(this);
 
@@ -78,21 +88,41 @@ public class MainActivity extends AppCompatActivity implements Subscriptor {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        invalidateOptionsMenu();
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_database) {
+            copyDb();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         destroyedBySystem = false;
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unsubscribeAllControllers();
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         destroyedBySystem = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unsubscribeAllControllers();
     }
 
     @Override
@@ -116,30 +146,15 @@ public class MainActivity extends AppCompatActivity implements Subscriptor {
 
     private void onBooksReceived(List<Book> result, boolean networkError) {
         if (networkError) {
-            //TODO show error text
+            recyclerView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+            errorText.setVisibility(View.VISIBLE);
         } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+            errorText.setVisibility(View.GONE);
             adapter.setBookList(result);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.clear();
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-
-        invalidateOptionsMenu();
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_database) {
-            copyDb();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void copyDb() {
