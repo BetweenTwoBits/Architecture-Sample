@@ -76,14 +76,20 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
 
             if (bookTitle != null) {
+                bookTitleView.setVisibility(View.VISIBLE);
                 bookTitleView.setText(bookTitle);
             } else {
+                bookTitleView.setVisibility(View.GONE);
                 bookTitleView.setText("");
             }
 
             if (bookAuthor != null) {
-                bookAuthorView.setText(bookAuthor);
+                String prefixedAuthor = "Author: " + bookAuthor;
+
+                bookAuthorView.setVisibility(View.VISIBLE);
+                bookAuthorView.setText(prefixedAuthor);
             } else {
+                bookAuthorView.setVisibility(View.GONE);
                 bookAuthorView.setText("");
             }
         }
