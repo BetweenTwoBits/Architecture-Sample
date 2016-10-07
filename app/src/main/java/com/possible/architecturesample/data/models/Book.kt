@@ -13,7 +13,7 @@ class Book {
     var author: String? = null
 
     @Generated(hash = 931745658)
-    constructor(id: Long?, title: String, imageUrl: String, author: String) {
+    constructor(id: Long?, title: String?, imageUrl: String?, author: String?) {
         this.id = id
         this.title = title
         this.imageUrl = imageUrl
