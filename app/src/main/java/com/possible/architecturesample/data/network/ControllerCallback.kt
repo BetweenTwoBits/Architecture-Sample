@@ -1,9 +1,9 @@
 package com.possible.architecturesample.data.network
 
-class ControllerCallback<in T> {
-    fun onControllerNext(t: T?) {}
+open class ControllerCallback<in T> {
+    open fun onControllerNext(result: T) {}
 
-    fun onControllerComplete() {}
+    open fun onControllerComplete() {}
 
-    fun onControllerError(exception: Exception) {}
+    open fun onControllerError(exception: Exception) {}
 }

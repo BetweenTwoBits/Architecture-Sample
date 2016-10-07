@@ -4,14 +4,10 @@ import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
-
 import com.possible.architecturesample.BookApplication
 import com.possible.architecturesample.R
 import com.possible.architecturesample.data.ControllerResult
@@ -24,29 +20,25 @@ import com.possible.architecturesample.data.network.requests.BookRequest
 import com.possible.architecturesample.di.ActivityComponent
 import com.possible.architecturesample.di.ActivityModule
 import com.possible.architecturesample.di.DaggerActivityComponent
-
+import kotlinx.android.synthetic.main.activity_main.errorText
+import kotlinx.android.synthetic.main.activity_main.progressBar
+import kotlinx.android.synthetic.main.activity_main.recyclerView
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
-import java.nio.channels.FileChannel
 import java.util.ArrayList
-
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), Subscriptor {
 
     @Inject lateinit var bookController: BookController
 
-    private var activityComponent: ActivityComponent? = null
-
     private val subscriptedControllers = ArrayList<BaseController>()
-    private var adapter: BookAdapter? = null
 
-    private var recyclerView: RecyclerView? = null
-    private var errorText: TextView? = null
-    private var progressBar: ProgressBar? = null
+    lateinit private var activityComponent: ActivityComponent
+    lateinit private var adapter: BookAdapter
 
     private var destroyedBySystem: Boolean = false
 
@@ -55,14 +47,11 @@ class MainActivity : AppCompatActivity(), Subscriptor {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        recyclerView = findViewById(R.id.recycler_view) as RecyclerView
-        errorText = findViewById(R.id.error_text) as TextView
-        progressBar = findViewById(R.id.progress_bar) as ProgressBar
 
         adapter = BookAdapter(this)
 
-        recyclerView!!.layoutManager = LinearLayoutManager(this)
-        recyclerView!!.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
 
         bookController.loadBooks(this, true, BookRequest(), object : ControllerCallback<ControllerResult<List<Book>>>() {
             override fun onControllerNext(result: ControllerResult<List<Book>>) {
@@ -109,7 +98,7 @@ class MainActivity : AppCompatActivity(), Subscriptor {
     }
 
     private fun unsubscribeAllControllers() {
-        val tag = subscriptorTag
+        val tag = getSubscriptorTag()
         for (controller in subscriptedControllers) {
             controller.unsubscribe(tag, !destroyedBySystem)
         }
@@ -123,14 +112,14 @@ class MainActivity : AppCompatActivity(), Subscriptor {
 
     private fun onBooksReceived(result: List<Book>, networkError: Boolean) {
         if (networkError) {
-            recyclerView!!.visibility = View.GONE
-            progressBar!!.visibility = View.GONE
-            errorText!!.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+            progressBar.visibility = View.GONE
+            errorText.visibility = View.VISIBLE
         } else {
-            recyclerView!!.visibility = View.VISIBLE
-            progressBar!!.visibility = View.GONE
-            errorText!!.visibility = View.GONE
-            adapter!!.setBookList(result)
+            recyclerView.visibility = View.VISIBLE
+            progressBar.visibility = View.GONE
+            errorText.visibility = View.GONE
+            adapter.setBookList(result)
         }
     }
 

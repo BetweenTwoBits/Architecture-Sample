@@ -1,20 +1,17 @@
 package com.possible.architecturesample
 
 import android.app.Application
-
 import com.possible.architecturesample.data.models.DaoMaster
 import com.possible.architecturesample.data.models.DaoSession
 import com.possible.architecturesample.di.ApplicationComponent
 import com.possible.architecturesample.di.ApplicationModule
 import com.possible.architecturesample.di.DaggerApplicationComponent
 
-import org.greenrobot.greendao.database.Database
-
 
 class BookApplication : Application() {
 
-    var appComponent: ApplicationComponent? = null
-    var daoSession: DaoSession? = null
+    lateinit var appComponent: ApplicationComponent
+    lateinit var daoSession: DaoSession
 
     override fun onCreate() {
         super.onCreate()
