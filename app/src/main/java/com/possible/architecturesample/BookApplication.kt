@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.Database
 
 class BookApplication : Application() {
 
-    private var appComponent: ApplicationComponent? = null
+    var appComponent: ApplicationComponent? = null
     var daoSession: DaoSession? = null
 
     override fun onCreate() {
