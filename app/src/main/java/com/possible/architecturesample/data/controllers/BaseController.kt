@@ -21,8 +21,8 @@ open class BaseController(protected var application: Application, protected var 
      * each methodTag to be unique per each Controller
      */
     fun executeInBackground(subscriptor: Subscriptor, methodTag: String, forceRefresh: Boolean,
-                            observable: Observable<*>, callback: ControllerCallback<Any>?) {
-        val tag = subscriptor.subscriptorTag + SEPARATOR + methodTag
+                            observable: Observable<*>, callback: ControllerCallback<*>?) {
+        val tag = subscriptor.getSubscriptorTag() + SEPARATOR + methodTag
         subscriptor.addSubscriptedController(this)
 
         if (forceRefresh) {
