@@ -12,7 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.possible.architecturesample.App;
+import com.possible.architecturesample.BookApplication;
 import com.possible.architecturesample.R;
 import com.possible.architecturesample.data.ControllerResult;
 import com.possible.architecturesample.data.Subscriptor;
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements Subscriptor {
 
     private void injectDependencies() {
         activityComponent = DaggerActivityComponent.builder()
-                .applicationComponent(((App) getApplication()).getAppComponent())
+                .applicationComponent(((BookApplication) getApplication()).getAppComponent())
                 .activityModule(new ActivityModule(this))
                 .build();
         inject(activityComponent);

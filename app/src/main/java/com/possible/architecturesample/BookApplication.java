@@ -11,7 +11,7 @@ import com.possible.architecturesample.di.DaggerApplicationComponent;
 import org.greenrobot.greendao.database.Database;
 
 
-public class App extends Application {
+public class BookApplication extends Application {
 
     protected ApplicationComponent appComponent;
     private DaoSession daoSession;

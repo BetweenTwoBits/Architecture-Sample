@@ -2,7 +2,7 @@ package com.possible.architecturesample.di;
 
 import android.app.Application;
 
-import com.possible.architecturesample.App;
+import com.possible.architecturesample.BookApplication;
 import com.possible.architecturesample.data.controllers.BookController;
 import com.possible.architecturesample.data.database.BookDataSource;
 import com.possible.architecturesample.data.network.NetworkDataSource;
@@ -17,7 +17,7 @@ import retrofit2.Retrofit;
 @Singleton
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
-    void inject(App application);
+    void inject(BookApplication application);
 
     void inject(BaseRequest request);
 

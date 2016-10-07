@@ -2,7 +2,7 @@ package com.possible.architecturesample.di;
 
 import android.app.Application;
 
-import com.possible.architecturesample.App;
+import com.possible.architecturesample.BookApplication;
 import com.possible.architecturesample.data.controllers.BookController;
 import com.possible.architecturesample.data.database.BookDataSource;
 import com.possible.architecturesample.data.models.DaoSession;
@@ -19,9 +19,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class ApplicationModule {
 
-    protected final App application;
+    protected final BookApplication application;
 
-    public ApplicationModule(App application) {
+    public ApplicationModule(BookApplication application) {
         this.application = application;
     }
 
