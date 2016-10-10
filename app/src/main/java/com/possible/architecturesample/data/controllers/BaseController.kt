@@ -2,6 +2,7 @@ package com.possible.architecturesample.data.controllers
 
 import android.app.Application
 import android.support.v4.util.SimpleArrayMap
+import com.possible.architecturesample.data.ControllerResult
 import com.possible.architecturesample.data.Subscriptor
 import com.possible.architecturesample.data.network.ControllerCallback
 import com.possible.architecturesample.data.network.NetworkDataSource
@@ -39,7 +40,7 @@ open class BaseController(protected var application: Application, protected var 
         }
 
         mapSubscriptions.put(tag,
-                observableWithSchedulers?.subscribe( { o -> callback?.onControllerNext(o) },
+                observableWithSchedulers?.subscribe( { o -> callback?.onControllerNext(o as ControllerResult<Nothing>) },
                         { throwable -> callback?.onControllerError(Exception(throwable)) },
                         { callback?.onControllerComplete() }))
     }

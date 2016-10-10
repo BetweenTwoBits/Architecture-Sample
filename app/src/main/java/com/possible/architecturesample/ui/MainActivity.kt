@@ -53,8 +53,8 @@ class MainActivity : AppCompatActivity(), Subscriptor {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
-        bookController.loadBooks(this, true, BookRequest(), object : ControllerCallback<ControllerResult<List<Book>>>() {
-            override fun onControllerNext(result: ControllerResult<List<Book>>) {
+        bookController.loadBooks(this, true, BookRequest(), object : ControllerCallback<List<Book>>() {
+            override fun onControllerNext(result: ControllerResult<out List<Book>>) {
                 onBooksReceived(result.result, result.isNetworkError)
             }
         })

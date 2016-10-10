@@ -4,7 +4,7 @@ import java.net.UnknownHostException
 
 class ControllerResult<T> {
     var exception: Throwable? = null
-    lateinit var result: T
+    var result: T
 
     constructor(result: T) {
         this.result = result

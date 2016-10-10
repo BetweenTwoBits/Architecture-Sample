@@ -16,7 +16,7 @@ class BookController(application: Application, networkDataSource: NetworkDataSou
                      private val bookDataSource: BookDataSource) : BaseController(application, networkDataSource) {
 
     fun loadBooks(subscriptor: Subscriptor, forceRefresh: Boolean, bookRequest: BookRequest,
-                  callback: ControllerCallback<ControllerResult<List<Book>>>) {
+                  callback: ControllerCallback<List<Book>>) {
 
         val url = bookRequest.url
 
