@@ -1,20 +1,17 @@
 package com.possible.architecturesample.di
 
 import android.app.Application
-
 import com.possible.architecturesample.BookApplication
 import com.possible.architecturesample.data.controllers.BookController
 import com.possible.architecturesample.data.database.BookDataSource
 import com.possible.architecturesample.data.models.DaoSession
 import com.possible.architecturesample.data.network.NetworkDataSource
-
-import javax.inject.Singleton
-
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 @Module
 class ApplicationModule(private val application: BookApplication) {
@@ -28,7 +25,11 @@ class ApplicationModule(private val application: BookApplication) {
     @Provides
     @Singleton
     fun providesRetrofit(): Retrofit {
-        return Retrofit.Builder().baseUrl("https://fakeurl.com").addCallAdapterFactory(RxJavaCallAdapterFactory.create()).addConverterFactory(GsonConverterFactory.create()).build()
+        return Retrofit
+                .Builder()
+                .baseUrl("https://fakeurl.com")
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create()).build()
     }
 
     @Provides
