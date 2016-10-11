@@ -33,7 +33,6 @@ class BookAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
         val book = bookData[position]
 
         bookViewHolder.bindBook(book)
-
     }
 
     override fun getItemCount(): Int {
