@@ -127,7 +127,8 @@ class MainActivity : AppCompatActivity(), Subscriptor {
         activityComponent = DaggerActivityComponent
                 .builder()
                 .applicationComponent((application as BookApplication).appComponent)
-                .activityModule(ActivityModule(this)).build()
+                .activityModule(ActivityModule(this))
+                .build()
         inject(activityComponent)
     }
 

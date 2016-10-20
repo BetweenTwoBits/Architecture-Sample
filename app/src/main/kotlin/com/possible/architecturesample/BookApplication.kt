@@ -24,7 +24,9 @@ class BookApplication : Application() {
     }
 
     private fun initializeInjector() {
-        appComponent = DaggerApplicationComponent.builder().applicationModule(ApplicationModule(this)).build()
+        appComponent = DaggerApplicationComponent.builder()
+                .applicationModule(ApplicationModule(this))
+                .build()
         appComponent.inject(this@BookApplication)
     }
 }

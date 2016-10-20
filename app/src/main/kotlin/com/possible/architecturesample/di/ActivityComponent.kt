@@ -7,7 +7,8 @@ import com.possible.architecturesample.ui.MainActivity
 import dagger.Component
 
 @PerActivity
-@Component(dependencies = arrayOf(ApplicationComponent::class), modules = arrayOf(ActivityModule::class))
+@Component(dependencies = arrayOf(ApplicationComponent::class),
+        modules = arrayOf(ActivityModule::class))
 interface ActivityComponent {
     fun inject(activity: MainActivity)
 
