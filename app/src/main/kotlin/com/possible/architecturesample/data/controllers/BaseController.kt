@@ -21,6 +21,7 @@ open class BaseController(protected var application: Application, protected var 
      * Make sure that subscriptor.getSubscriptorTag() returns an unique value per Subscriptor and
      * each methodTag to be unique per each Controller
      */
+    @Suppress("UNCHECKED_CAST")
     fun executeInBackground(subscriptor: Subscriptor, methodTag: String, forceRefresh: Boolean,
                             observable: Observable<*>, callback: ControllerCallback<*>?) {
         val tag = subscriptor.getSubscriptorTag() + SEPARATOR + methodTag
