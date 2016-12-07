@@ -32,10 +32,8 @@ class BookController(application: Application, networkDataSource: NetworkDataSou
 
     private fun getParsedData(bookResponses: List<BookResponse>): List<Book> {
         val books = ArrayList<Book>(bookResponses.size)
-        if (bookResponses.size > 0) {
-            for (response in bookResponses) {
-                books.add(Book(null, response.title, response.imageUrl, response.author))
-            }
+        if (bookResponses.isNotEmpty()) {
+            bookResponses.mapTo(books) { Book(null, it.title, it.imageUrl, it.author) }
         }
 
         return books
